@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Meu Treino</title>
 <link rel="manifest" href="manifest.webmanifest">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.109.0/dist/umd/supabase.js"></script>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#111418">
@@ -50,6 +51,30 @@ h2{font-size:17px;margin:14px 2px 8px}
 .ex input{-webkit-user-select:text;user-select:text}
 .ex.drag{position:relative;z-index:20;border-color:var(--ac);box-shadow:0 10px 28px rgba(0,0,0,.3);transition:none}
 .ex{-webkit-tap-highlight-color:transparent}
+.dbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dbar b{font-size:16px}
+.dbar button{width:44px;height:38px;border:0;background:var(--bg);color:var(--tx);border-radius:8px;font-size:20px}
+.st{display:flex;gap:8px}
+.st button{flex:1;height:46px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;font-weight:600;font-size:15px}
+.st button.sel{background:var(--ok);border-color:var(--ok);color:#fff}
+.st button.nok{background:#d97706;border-color:#d97706;color:#fff}
+.lk{border:0;background:none;color:var(--ac);font-weight:600;padding:0;font-size:inherit}
+.wbar{margin:0 0 10px}.wbar i{background:var(--wa,#38bdf8)}
+.wt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.wt button{height:60px;border:1px solid var(--bd);background:var(--card);color:var(--mu);border-radius:12px;font-size:13px;white-space:pre-line;line-height:1.3}
+.wt button.on{background:var(--wa,#38bdf8);border-color:var(--wa,#38bdf8);color:#fff}
+.hs{overflow-x:auto;position:relative;padding:18px 0 6px}
+.hm{display:flex;gap:3px;width:max-content}
+.hc{display:flex;flex-direction:column;gap:3px;position:relative}
+.ml{position:absolute;top:-16px;left:0;font-size:11px;color:var(--mu);white-space:nowrap}
+.c{width:12px;height:12px;border-radius:3px;background:var(--bd);display:block}
+.c.g{background:var(--ok)}.wm .c.g{background:var(--wa,#38bdf8)}
+.c.f{opacity:.4}.c.e{background:transparent}.c.t{box-shadow:0 0 0 2px var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{display:flex;align-items:center;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+.chip input{border:0;background:none;color:var(--tx);font:inherit;width:96px;height:38px;padding:0 6px}
+.chip button{border:0;background:none;color:var(--mu);width:30px;height:38px;font-size:18px}
+.tabs button[data-t="Peso"]{flex:2;min-width:96px}
 .grip{flex:none;width:44px;height:34px;display:flex;align-items:center;justify-content:center;margin-left:6px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--mu);font-size:20px;line-height:1;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
 .mv{display:flex;flex:none}.mv button{width:38px;height:32px;border:1px solid var(--bd);background:var(--bg);color:var(--mu);border-radius:8px;margin-left:6px;font-size:14px}
 .pl{width:100%;height:46px;border:1px dashed var(--bd);background:none;border-radius:12px;color:var(--ac);font-weight:600;margin-bottom:8px;font-size:15px}
@@ -57,10 +82,20 @@ h2{font-size:17px;margin:14px 2px 8px}
 .add input{flex:1;min-width:0;height:44px;border:1px solid var(--bd);background:var(--in);color:var(--tx);border-radius:10px;padding:0 10px;font-size:16px}
 .add button{flex:1;height:44px;border:0;border-radius:10px;background:var(--ac);color:var(--acx);font-weight:600}
 .add button.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+
+.md{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.mb{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:18px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+.mb p{color:var(--mu);font-size:14px;margin:8px 0 12px}
+.mb input{width:100%;height:46px;border:1px solid var(--bd);background:var(--in);color:var(--tx);border-radius:10px;padding:0 12px;font-size:16px;margin-bottom:8px}
+.mbs{display:flex;flex-direction:column;gap:8px;margin:8px 0 12px}.mbs.r{flex-direction:row}.mbs.r button{flex:1}
+.mbs button{height:46px;border:0;border-radius:10px;background:var(--ac);color:var(--acx);font-weight:600;font-size:15px}
+.mbs button.g{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}
+.sy{font-size:12px;color:var(--mu);text-align:right;padding:0 2px 4px;min-height:16px}
 </style>
 </head>
 <body>
 <div class="top">
+<div class="sy" id="sy"></div>
 <div class="tabs" id="tabs"></div>
 <div class="wk" id="wk"><button id="prev" aria-label="Semana anterior">‹</button><b id="wl"></b><button id="next" aria-label="Próxima semana">›</button></div>
 </div>
@@ -78,17 +113,19 @@ var S={tab:"Seg",week:1,loads:{},done:{},weights:{},start:60,goal:70};
 var SK="treino:v1";var adding=false,editing=null;
 try{var raw=localStorage.getItem(SK);if(raw){var o=JSON.parse(raw);for(var k in o)S[k]=o[k];}}catch(e){}
 if(!S.items){S.items={};Object.keys(DAYS).forEach(function(k){S.items[k]=DAYS[k][1].map(function(e,i){return{id:String(i),n:e[0],sr:e[1],st:e[2]}})})}
-function save(){try{localStorage.setItem(SK,JSON.stringify({items:S.items,tab:S.tab,week:S.week,loads:S.loads,done:S.done,weights:S.weights,start:S.start,goal:S.goal}));}catch(e){}}
+if(!S.log)S.log={};if(!S.water)S.water={};if(!S.fired)S.fired={};if(!S.rem)S.rem={on:false,times:["09:00","11:00","13:00","15:00","17:00","19:00","21:00"]};if(S.next&&DAYS[S.next])S.tab=S.next;
+function snap(){return{log:S.log,water:S.water,next:S.next,rem:S.rem,fd:S.fd,fired:S.fired,items:S.items,tab:S.tab,week:S.week,loads:S.loads,done:S.done,weights:S.weights,start:S.start,goal:S.goal,mt:S.mt||0}}
+function save(touch){try{if(touch!==false)S.mt=Date.now();localStorage.setItem(SK,JSON.stringify(snap()))}catch(e){}if(touch!==false&&typeof cloudDirty==="function")cloudDirty()}
 function lk(d,i,w){return d+"|"+i+"|"+w}
 function prevLoad(d,i,w){for(var x=w-1;x>=1;x--){var v=S.loads[lk(d,i,x)];if(v!==undefined&&v!=="")return v+" kg (sem. "+x+")";}return null}
-function tabs(){document.getElementById("tabs").innerHTML=KEYS.map(function(k){return '<button data-t="'+k+'" class="'+(k===S.tab?"on":"")+'">'+k+'</button>'}).join("")}
+function tabs(){document.getElementById("tabs").innerHTML=KEYS.map(function(k){return '<button data-t="'+k+'" class="'+(k===S.tab?"on":"")+'">'+(k==="Peso"?"Dashboard":k)+'</button>'}).join("")}
 function render(){
 tabs();
 document.getElementById("wl").textContent="Semana "+S.week+" de 24";
 document.getElementById("wk").style.display=S.tab==="Peso"?"none":"flex";
 var m=document.getElementById("main");
 if(S.tab==="Peso"){return renderPeso(m)}
-var d=S.tab,ex=S.items[d],h='<h2>'+DAYS[d][0]+'</h2>';
+var d=S.tab,ex=S.items[d],h=dayBar()+'<h2>'+DAYS[d][0]+'</h2>';
 ex.forEach(function(e){
 var i=e.id,key=lk(d,i,S.week),v=S.loads[key]===undefined?"":S.loads[key],dn=S.done[key];
 var pl=prevLoad(d,i,S.week);
@@ -101,6 +138,7 @@ h+='<div class="ex'+(dn?" done":"")+'" data-id="'+i+'">'+(editing===i?'<div clas
 });
 if(adding)h+='<div class="add"><input id="nn" type="text" placeholder="Nome do exercício" maxlength="60"><input id="ns" type="text" placeholder="3x10" maxlength="24" style="flex:none;width:84px"></div><div class="add"><button data-a="ok">Adicionar</button><button class="g" data-a="no">Cancelar</button></div>';
 else h+='<button class="pl" data-a="add">+ Adicionar exercício</button>';
+h+=waterBox();
 h+='<div class="tip">Completou todas as séries no topo das repetições? Suba a carga na próxima semana. Toque no nome ou nas séries para editar. Segure ⠿ (ou o nome) e arraste para reordenar; × remove.</div>';
 m.innerHTML=h;
 if(adding){var nn=document.getElementById("nn");if(nn)nn.focus();}
@@ -114,29 +152,271 @@ function escq(t){return esc(t).replace(/"/g,"&quot;")}
 function saveEdit(){var n=document.getElementById("en"),q=document.getElementById("es"),it=S.items[S.tab].filter(function(x){return x.id===editing})[0];
 if(it&&n&&q){var v=n.value.trim();if(v)it.n=v;var sv=q.value.trim();if(sv)it.sr=sv;save()}
 editing=null;render();}
+var ld=ds(new Date()),remMsg="";
+var MN=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],MF=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],WN=["dom","seg","ter","qua","qui","sex","sáb"];
+function ds(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x}
+function pd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}
+function shift(s,n){var d=pd(s);d.setDate(d.getDate()+n);return ds(d)}
+function lbl(s){var d=pd(s);return (s===ds(new Date())?"Hoje · ":"")+WN[d.getDay()]+", "+d.getDate()+"/"+(d.getMonth()+1)}
+function dayBar(){
+var g=S.log[ld],nx=S.next||"",txt="";
+if(g&&g.t===0)txt='<div class="hint" style="margin-top:8px">Tudo bem! Este treino continua pendente: faça no próximo dia livre (sáb/dom valem) e siga a ordem. Não junte dois treinos no mesmo dia.</div>';
+var nl=nx&&DAYS[nx]?'<div class="hint" style="margin-top:8px">Próximo na sequência: <button class="lk" data-t="'+nx+'">'+nx+' · '+DAYS[nx][0]+'</button></div>':"";
+return '<div class="box"><div class="dbar"><button data-a="dm" aria-label="Dia anterior">‹</button><b>'+lbl(ld)+'</b><button data-a="dp" aria-label="Próximo dia">›</button></div><div class="st"><button class="'+(g&&g.t===1?"sel":"")+'" data-a="did">'+(g&&g.t===1?"✓ Treinei":"Treinei")+'</button><button class="'+(g&&g.t===0?"nok":"")+'" data-a="dno">'+(g&&g.t===0?"✕ Não treinei":"Não treinei")+'</button></div>'+txt+nl+'</div>';
+}
+function waterBox(){
+var w=S.water[ld]||0,h='<h2>Água · '+(w*0.5).toFixed(1).replace(".",",")+' de 2 litros</h2><div class="bar wbar"><i style="width:'+Math.min(100,w/4*100)+'%"></i></div><div class="wt">';
+for(var k=1;k<=4;k++)h+='<button data-wc="'+k+'" class="'+(w>=k?"on":"")+'">'+k+"\n500 ml</button>";
+return h+'</div>';
+}
+function heat(title,k,fn,unit){
+var Y=new Date().getFullYear(),st=new Date(Y,0,1,12);st.setDate(1-st.getDay());
+var end=new Date(Y,11,31,12),today=ds(new Date()),cm=new Date().getMonth(),cnt=0,mc=0,d=new Date(st),cols="";
+while(d<=end){
+var col="",lab="";
+for(var r=0;r<7;r++){
+var s=ds(d);
+if(d.getFullYear()===Y){var v=!!fn(s);if(v){cnt++;if(d.getMonth()===cm)mc++}
+if(d.getDate()===1)lab=MN[d.getMonth()];
+col+='<i class="c'+(v?" g":"")+(s>today?" f":"")+(s===today?" t":"")+'" data-d="'+s+'"></i>'}
+else col+='<i class="c e"></i>';
+d.setDate(d.getDate()+1)}
+cols+='<div class="hc">'+(lab?'<span class="ml">'+lab+'</span>':"")+col+'</div>'}
+return '<div class="box'+(k==="w"?" wm":"")+'" data-k="'+k+'"><b>'+title+'</b><div class="hs"><div class="hm">'+cols+'</div></div><div class="hint"><b>'+mc+'</b> '+unit+' em '+MF[cm]+' · '+cnt+' em '+Y+'</div><div class="hint hd">Toque num quadrado para ver o dia.</div></div>';
+}
+function dash(){
+return '<h2>Treinos</h2>'+heat("Dias treinados","t",function(s){return S.log[s]&&S.log[s].t===1},"dias treinados")+'<h2>Água</h2>'+heat("Meta de 2 L batida","w",function(s){return (S.water[s]||0)>=4},"dias com meta batida");
+}
+function remBox(){
+var h='<h2>Lembretes de água</h2><div class="box"><div class="st"><button class="'+(S.rem.on?"sel":"")+'" data-a="rt">'+(S.rem.on?"✓ Ligados":"Ativar lembretes")+'</button><button data-a="rtest">Testar</button></div><div class="chips">';
+S.rem.times.forEach(function(t,i){h+='<span class="chip"><input type="time" data-rt="'+i+'" value="'+t+'"><button data-a="rx" data-i="'+i+'" aria-label="Remover">×</button></span>'});
+return h+'</div><button class="pl" data-a="radd">+ Adicionar horário</button>'+(remMsg?'<div class="hint" style="color:var(--ac)">'+remMsg+'</div>':'')+'<div class="hint">Os avisos aparecem com o app aberto ou em segundo plano. Com o app totalmente fechado, o Android pode não disparar: para garantir, use também um alarme do relógio.</div></div>';
+}
+function remOn(){
+if(typeof Notification==="undefined"){remMsg="Este navegador não suporta notificações.";render();return}
+if(S.rem.on){S.rem.on=false;save();render();return}
+Notification.requestPermission().then(function(p){
+if(p==="granted"){S.rem.on=true;remMsg=""}else remMsg="Permissão negada. Libere as notificações do app nas configurações do Android.";
+save();render();
+}).catch(function(){remMsg="Não foi possível pedir permissão aqui. Use o app instalado (versão do GitHub).";render()});
+}
+function notify(txt){
+var o={body:txt,icon:"icon-192.png",badge:"icon-192.png",tag:"agua",renotify:true},T="💧 Hora de beber água";
+function fb(){try{new Notification(T,o)}catch(e){}}
+if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration){navigator.serviceWorker.getRegistration().then(function(r){if(r)r.showNotification(T,o);else fb()}).catch(fb)}else fb();
+}
+function tick(){
+if(!S.rem||!S.rem.on||typeof Notification==="undefined"||Notification.permission!=="granted")return;
+var n=new Date(),k=ds(n),nm=n.getHours()*60+n.getMinutes();
+if(S.fd!==k){S.fd=k;S.fired={}}
+if((S.water[k]||0)>=4)return;
+S.rem.times.forEach(function(t){
+var p=t.split(":"),tm=+p[0]*60+ +p[1];
+if(nm>=tm&&nm-tm<=10&&!S.fired[t]){S.fired[t]=1;save(false);notify("Meta de hoje: 2 L. Você já bebeu "+((S.water[k]||0)*0.5).toFixed(1).replace(".",",")+" L.")}
+});
+}
+setInterval(tick,20000);document.addEventListener("visibilitychange",tick);tick();
+var SB_URL="https://qvmyrelmcwpxvzishetu.supabase.co";
+var SB_KEY="COLE_AQUI_A_CHAVE_PUBLISHABLE";
+var TB="meu_treino_dados";
+var DK={log:{},water:{},next:null,rem:{on:false,times:["09:00","11:00","13:00","15:00","17:00","19:00","21:00"]},fd:null,fired:{},items:null,week:1,loads:{},done:{},weights:{},start:60,goal:70,mt:0};
+var sb=null,user=null,pt=null,busy=false,paused=false,recov=false,stx="";
+var sync=lget("treino:sync",{pending:false,raw:null,uid:null});
+function lget(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sset(){try{localStorage.setItem("treino:sync",JSON.stringify(sync))}catch(e){}}
+function cloudOK(){return !!window.supabase&&SB_KEY.indexOf("COLE")!==0}
+function hhmm(){var d=new Date();return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2)}
+function setSt(t){stx=t;var a=document.getElementById("sy"),b=document.getElementById("sy2");if(a)a.textContent=t;if(b)b.textContent=t}
+function defItems(){var r={};Object.keys(DAYS).forEach(function(k){r[k]=DAYS[k][1].map(function(e,i){return{id:String(i),n:e[0],sr:e[1],st:e[2]}})});return r}
+function hasData(o){if(!o)return false;var n=function(x){return x&&Object.keys(x).length>0};
+return !!(n(o.loads)||n(o.weights)||n(o.log)||n(o.water)||n(o.done)||(o.items&&JSON.stringify(o.items)!==JSON.stringify(defItems())))}
+function bak(name){try{var s=snap();if(hasData(s))localStorage.setItem(name||"treino:bak",JSON.stringify({em:new Date().toISOString(),dados:s}))}catch(e){}}
+function applyData(o){
+for(var k in DK)S[k]=JSON.parse(JSON.stringify(o[k]!==undefined?o[k]:DK[k]));
+if(!S.items)S.items=defItems();
+if(S.next&&DAYS[S.next])S.tab=S.next;
+save(false);render();
+}
+function ask(title,msg,btns){return new Promise(function(res){
+var d=document.createElement("div");d.className="md";
+d.innerHTML='<div class="mb"><b>'+title+'</b><p>'+msg+'</p><div class="mbs">'+btns.map(function(b,i){return '<button class="'+(b[1]||"")+'" data-m="'+i+'">'+b[0]+'</button>'}).join("")+'</div></div>';
+d.addEventListener("click",function(e){var i=e.target.getAttribute("data-m");if(i!==null){document.body.removeChild(d);res(+i)}});
+document.body.appendChild(d)})}
+function cloudDirty(){
+if(!sync)return;sync.pending=true;sset();
+if(!user)return;
+clearTimeout(pt);pt=setTimeout(function(){push(false)},1800);setSt("☁ Salvando…");
+}
+function retry(){clearTimeout(pt);pt=setTimeout(function(){push(false)},20000)}
+async function push(force){
+if(!cloudOK()||!user||paused)return false;
+if(!navigator.onLine){setSt("⚠ Offline · salvo no aparelho, envio quando voltar");return false}
+setSt("☁ Sincronizando…");
+var d=snap(),v=S.mt,now=new Date().toISOString(),q=sb.from(TB),r;
+try{
+if(force)r=await q.upsert({user_id:user.id,dados:d,atualizado_em:now},{onConflict:"user_id"}).select("atualizado_em");
+else if(!sync.raw)r=await q.insert({user_id:user.id,dados:d,atualizado_em:now}).select("atualizado_em");
+else r=await q.update({dados:d,atualizado_em:now}).eq("user_id",user.id).eq("atualizado_em",sync.raw).select("atualizado_em");
+if(r.error){if(r.error.code==="23505"){await conflictNow();return false}throw r.error}
+if(!r.data||!r.data.length){await conflictNow();return false}
+sync.raw=r.data[0].atualizado_em;sync.uid=user.id;sync.pending=(S.mt!==v);sset();
+if(sync.pending){clearTimeout(pt);pt=setTimeout(function(){push(false)},800)}
+setSt("☁ Sincronizado · "+hhmm());return true;
+}catch(e){sync.pending=true;sset();setSt(navigator.onLine?"⚠ Erro ao sincronizar, tentando de novo":"⚠ Offline · salvo no aparelho");retry();return false}
+}
+async function conflictNow(){
+var r=await sb.from(TB).select("dados,atualizado_em").eq("user_id",user.id).maybeSingle();
+if(r.data)await conflictDlg(r.data);else{sync.raw=null;sset();await push(false)}
+}
+async function conflictDlg(row){
+var c=await ask("Dados diferentes","Os dados deste aparelho e os da nuvem não são iguais. Qual manter? Os que você não escolher ficam guardados como backup neste aparelho.",[["Usar os da nuvem",""],["Enviar os deste aparelho","g"],["Decidir depois","g"]]);
+if(c===0){bak();applyData(row.dados||{});sync.raw=row.atualizado_em;sync.uid=user.id;sync.pending=false;sset();setSt("☁ Sincronizado · "+hhmm());return}
+if(c===1){
+var ok=await ask("Sobrescrever a nuvem?","Os dados da nuvem serão substituídos pelos deste aparelho (uma cópia fica guardada aqui). Continuar?",[["Sim, sobrescrever",""],["Cancelar","g"]]);
+if(ok===0){try{localStorage.setItem("treino:bak-nuvem",JSON.stringify({em:row.atualizado_em,dados:row.dados}))}catch(e){}sync.raw=row.atualizado_em;sync.uid=user.id;sset();paused=false;await push(false);return}
+}
+paused=true;setSt("⚠ Sincronização pausada · toque em Sincronizar agora");
+}
+async function initSync(){
+if(busy||!user)return;busy=true;setSt("☁ Sincronizando…");
+try{
+if(sync.uid&&sync.uid!==user.id)sync={pending:false,raw:null,uid:null};
+var r=await sb.from(TB).select("dados,atualizado_em").eq("user_id",user.id).maybeSingle();
+if(r.error)throw r.error;
+var row=r.data,hl=hasData(snap());
+if(!row){
+if(hl){var c=await ask("Migrar seus dados?","Encontrei treinos e registros salvos só neste aparelho. Quer enviá-los para a sua conta na nuvem?",[["Migrar para a nuvem",""],["Começar do zero","g"]]);
+if(c===1){bak();applyData({})}}
+sync.raw=null;sync.uid=user.id;sset();await push(false);
+}else{
+var cl=row.dados||{},hc=hasData(cl);
+if(!hl){if(hc)applyData(cl);sync.raw=row.atualizado_em;sync.uid=user.id;sync.pending=false;sset();setSt("☁ Sincronizado · "+hhmm())}
+else if(!hc){sync.raw=row.atualizado_em;sync.uid=user.id;sset();await push(false)}
+else if(sync.uid===user.id&&sync.raw===row.atualizado_em){if(sync.pending)await push(false);else setSt("☁ Sincronizado · "+hhmm())}
+else if(sync.uid===user.id&&sync.raw&&!sync.pending){applyData(cl);sync.raw=row.atualizado_em;sset();setSt("☁ Sincronizado · "+hhmm())}
+else await conflictDlg(row);
+}
+render();
+}catch(e){setSt(navigator.onLine?"⚠ Erro ao sincronizar: "+(e&&e.message?e.message:"tente de novo"):"⚠ Offline · usando os dados do aparelho")}
+finally{busy=false}
+}
+async function refresh(){
+if(!user||busy||paused)return;
+if(sync.pending){push(false);return}
+try{var r=await sb.from(TB).select("dados,atualizado_em").eq("user_id",user.id).maybeSingle();
+if(r.data&&r.data.atualizado_em!==sync.raw&&!sync.pending){applyData(r.data.dados||{});sync.raw=r.data.atualizado_em;sset();setSt("☁ Sincronizado · "+hhmm())}}catch(e){}
+}
+function trErr(e){var m=(e&&e.message)||"Erro";
+if(/Invalid login/i.test(m))return "E-mail ou senha incorretos.";
+if(/not confirmed/i.test(m))return "Confirme seu e-mail antes de entrar.";
+if(/already registered/i.test(m))return "Esse e-mail já tem conta. Use Entrar.";
+if(/at least|weak/i.test(m))return "Senha fraca: use pelo menos 6 caracteres.";
+return m}
+function hideAu(){var d=document.getElementById("au");if(d)d.parentNode.removeChild(d)}
+function authUI(msg){
+var d=document.getElementById("au");if(!d){d=document.createElement("div");d.id="au";d.className="md";document.body.appendChild(d)}
+d.innerHTML='<div class="mb"><b>Meu Treino</b><p>Entre ou crie uma conta para guardar seus dados na nuvem e usar no celular e no computador.</p><input id="ae" type="email" placeholder="E-mail" autocomplete="email"><input id="ap" type="password" placeholder="Senha (mínimo 6 caracteres)" autocomplete="current-password"><div class="mbs r"><button data-au="in">Entrar</button><button class="g" data-au="up">Criar conta</button></div><button class="lk" data-au="fg">Esqueci a senha</button> &nbsp;·&nbsp; <button class="lk" data-au="off">Continuar sem conta</button><p id="am">'+(msg||"")+'</p></div>';
+}
+function pwUI(){
+var d=document.getElementById("au");if(!d){d=document.createElement("div");d.id="au";d.className="md";document.body.appendChild(d)}
+d.innerHTML='<div class="mb"><b>Nova senha</b><p>Digite a nova senha da sua conta.</p><input id="ap" type="password" placeholder="Nova senha (mínimo 6 caracteres)" autocomplete="new-password"><div class="mbs"><button data-au="np">Salvar nova senha</button></div><p id="am"></p></div>';
+}
+document.addEventListener("click",async function(ev){
+var a=ev.target.getAttribute&&ev.target.getAttribute("data-au");if(!a)return;
+var am=document.getElementById("am"),say=function(t){if(am)am.textContent=t};
+var em=((document.getElementById("ae")||{}).value||"").trim(),pw=(document.getElementById("ap")||{}).value||"",base=location.origin+location.pathname;
+if(a==="off"){try{localStorage.setItem("treino:off","1")}catch(e){}hideAu();setSt("Sem conta · salvo só neste aparelho");render();return}
+if(!sb){say("Nuvem indisponível agora (sem conexão ou chave não configurada).");return}
+try{
+if(a==="in"){say("Entrando…");var r=await sb.auth.signInWithPassword({email:em,password:pw});if(r.error)say(trErr(r.error))}
+else if(a==="up"){say("Criando conta…");var r2=await sb.auth.signUp({email:em,password:pw,options:{emailRedirectTo:base}});
+if(r2.error)say(trErr(r2.error));else if(!r2.data.session)say("Conta criada! Abra o e-mail de confirmação, depois volte aqui e toque em Entrar.")}
+else if(a==="fg"){if(!em){say("Digite seu e-mail acima primeiro.");return}
+var r3=await sb.auth.resetPasswordForEmail(em,{redirectTo:base});say(r3.error?trErr(r3.error):"Se esse e-mail tiver conta, enviamos um link para redefinir a senha.")}
+else if(a==="np"){var r4=await sb.auth.updateUser({password:pw});if(r4.error)say(trErr(r4.error));else{recov=false;hideAu();initSync()}}
+}catch(e){say("Sem conexão. Tente de novo.")}
+});
+function exportJ(){
+var o=Object.assign({app:"meu-treino",versao:1,exportado_em:new Date().toISOString()},snap());
+var b=new Blob([JSON.stringify(o,null,1)],{type:"application/json"}),a=document.createElement("a");
+a.href=URL.createObjectURL(b);a.download="meu-treino-backup-"+ds(new Date())+".json";document.body.appendChild(a);a.click();
+setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a)},500);
+}
+function importFile(inp){
+var f=inp.files&&inp.files[0];inp.value="";if(!f)return;
+var rd=new FileReader();
+rd.onload=function(){var o;
+try{o=JSON.parse(rd.result)}catch(e){ask("Arquivo inválido","Não consegui ler esse arquivo JSON.",[["OK",""]]);return}
+if(o&&o.dados&&typeof o.dados==="object")o=o.dados;
+if(!o||typeof o!=="object"||!(o.items||o.loads||o.weights||o.log)){ask("Arquivo inválido","Esse arquivo não parece um backup do Meu Treino.",[["OK",""]]);return}
+ask("Importar backup?","Isso substitui os dados atuais pelos do arquivo (e também os da nuvem, se você estiver conectado). Seus dados atuais ficam guardados como backup neste aparelho.",[["Importar",""],["Cancelar","g"]]).then(function(c){if(c!==0)return;bak();applyData(o);save()})};
+rd.readAsText(f);
+}
+function acctBox(){
+var h='<h2>Conta e dados</h2><div class="box"><div class="hint" id="sy2">'+esc(stx)+'</div>';
+if(user)h+='<div class="hint">Conta: <b>'+esc(user.email||"")+'</b></div><div class="st" style="margin-top:10px"><button data-a="sync">Sincronizar agora</button><button data-a="out">Sair</button></div>';
+else if(cloudOK())h+='<div class="st" style="margin-top:10px"><button data-a="login">Entrar / criar conta</button></div>';
+else h+='<div class="hint">Nuvem desativada: falta colar a chave publishable no código (SB_KEY).</div>';
+return h+'<div class="st" style="margin-top:8px"><button data-a="exp">Exportar backup</button><button data-a="imp">Importar backup</button></div><input type="file" id="fi" accept="application/json,.json" style="display:none"><div class="hint" style="margin-top:8px">Os dados ficam salvos no aparelho e vão para a nuvem quando há conexão.</div></div>';
+}
+if(cloudOK()){
+sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+setSt("☁ Conectando…");
+sb.auth.onAuthStateChange(function(ev,sess){
+if(ev==="PASSWORD_RECOVERY"){recov=true;pwUI();return}
+user=sess?sess.user:null;
+if(ev==="SIGNED_OUT"){setSt("Sem conta · salvo só neste aparelho");if(!lget("treino:off",0))authUI();render();return}
+if(user&&(ev==="INITIAL_SESSION"||ev==="SIGNED_IN")&&!recov){hideAu();setTimeout(initSync,0)}
+else if(!user&&ev==="INITIAL_SESSION"){if(lget("treino:off",0))setSt("Sem conta · salvo só neste aparelho");else{setSt("Sem conta · salvo só neste aparelho");authUI()}}
+});
+window.addEventListener("online",function(){if(user&&sync.pending)push(false)});
+document.addEventListener("visibilitychange",function(){if(!document.hidden)refresh()});
+}else setSt(window.supabase?"Nuvem desativada · salvo só neste aparelho":"Sem conexão com a nuvem · salvo só neste aparelho");
 function renderPeso(m){
 var ws=Object.keys(S.weights).map(Number).sort(function(a,b){return a-b});
 var cur=ws.length?S.weights[ws[ws.length-1]]:S.start;
 var pct=Math.max(0,Math.min(100,(cur-S.start)/(S.goal-S.start)*100));
 var need=((S.goal-S.start)/26).toFixed(2);
-var h='<h2>Peso corporal</h2><div class="box"><div class="row" style="border:0;padding-top:0"><span>Início</span><b>'+S.start+' kg</b></div>'+
+var h=dash()+'<h2>Peso corporal</h2><div class="box"><div class="row" style="border:0;padding-top:0"><span>Início</span><b>'+S.start+' kg</b></div>'+
 '<div class="row"><span>Atual</span><b>'+cur+' kg</b></div><div class="row"><span>Meta</span><b>'+S.goal+' kg</b></div>'+
 '<div class="bar"><i style="width:'+pct.toFixed(0)+'%"></i></div><div class="hint">'+pct.toFixed(0)+'% da meta · ideal: +'+need+' kg por semana</div></div>'+
 '<div class="box"><b>Registrar peso da semana '+S.week+'</b><div class="big"><input id="pw" type="number" inputmode="decimal" step="0.1" placeholder="kg (em jejum)" value="'+(S.weights[S.week]||"")+'"><button id="ps">Salvar</button></div>'+
 '<div class="big" style="justify-content:space-between"><button id="pwp" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">‹ Sem. anterior</button><button id="pwn" style="background:var(--bg);color:var(--tx);border:1px solid var(--bd)">Próxima sem. ›</button></div></div>';
 if(ws.length){h+='<div class="box"><b>Histórico</b>';var prev=S.start;ws.forEach(function(w){var v=S.weights[w],dl=v-prev;prev=v;h+='<div class="row"><span>Semana '+w+'</span><span><b>'+v+' kg</b> <span style="color:var(--mu)">('+(dl>=0?"+":"")+dl.toFixed(1)+')</span></span></div>'});h+='</div>';}
+h+=remBox();
+h+=acctBox();
 h+='<div class="tip">Se não subir pelo menos 0,25 kg por semana durante 2 a 3 semanas, aumente a comida.</div>';
 m.innerHTML=h;
+[].forEach.call(document.querySelectorAll(".hs"),function(x){var c=x.querySelector(".t");if(c)x.scrollLeft=c.parentNode.offsetLeft-x.clientWidth/2});
 }
 document.addEventListener("click",function(ev){
 if(Date.now()-noClick<400)return;
 var t=ev.target,a=t.getAttribute&&t.getAttribute("data-a"),tb=t.getAttribute&&t.getAttribute("data-t");
-if(tb){S.tab=tb;adding=false;editing=null;save();render();window.scrollTo(0,0);return}
+if(tb){S.tab=tb;adding=false;editing=null;save(false);render();window.scrollTo(0,0);return}
 if(t.id==="prev"){S.week=Math.max(1,S.week-1);save();render();return}
 if(t.id==="next"){S.week=Math.min(24,S.week+1);save();render();return}
 if(t.id==="pwp"){S.week=Math.max(1,S.week-1);save();render();return}
 if(t.id==="pwn"){S.week=Math.min(24,S.week+1);save();render();return}
 if(t.id==="ps"){var v=parseFloat(document.getElementById("pw").value);if(!isNaN(v)&&v>0){S.weights[S.week]=v}else{delete S.weights[S.week]}save();render();return}
+var wc=t.getAttribute&&t.getAttribute("data-wc"),dd=t.getAttribute&&t.getAttribute("data-d");
+if(wc){var wn=+wc,w0=S.water[ld]||0;S.water[ld]=(w0===wn)?wn-1:wn;save();render();return}
+if(dd){var bx=t.closest(".box"),kk=bx.getAttribute("data-k"),pp=pd(dd),tx=pp.getDate()+"/"+(pp.getMonth()+1)+"/"+pp.getFullYear()+": ";
+if(kk==="t"){var lg=S.log[dd];tx+=lg?(lg.t===1?"treinou"+(lg.w?" ("+lg.w+")":""):"não treinou"):"sem registro"}
+else{var wv=S.water[dd]||0;tx+=(wv*0.5).toFixed(1).replace(".",",")+" L"+(wv>=4?" · meta batida":"")}
+bx.querySelector(".hd").textContent=tx;return}
+if(a==="dm"){ld=shift(ld,-1);render();return}
+if(a==="dp"){ld=shift(ld,1);render();return}
+if(a==="did"){var g0=S.log[ld];if(g0&&g0.t===1){delete S.log[ld]}else{S.log[ld]={t:1,w:S.tab};var ks=Object.keys(DAYS),ni=(ks.indexOf(S.tab)+1)%ks.length;if(ni===0)S.week=Math.min(24,S.week+1);S.next=ks[ni]}save();render();return}
+if(a==="dno"){var g1=S.log[ld];if(g1&&g1.t===0)delete S.log[ld];else S.log[ld]={t:0};save();render();return}
+if(a==="sync"){paused=false;initSync();return}
+if(a==="out"){if(sb)sb.auth.signOut();return}
+if(a==="login"){try{localStorage.removeItem("treino:off")}catch(e){}authUI();return}
+if(a==="exp"){exportJ();return}
+if(a==="imp"){document.getElementById("fi").click();return}
+if(a==="rt"){remOn();return}
+if(a==="rtest"){if(typeof Notification==="undefined"||Notification.permission!=="granted"){remMsg="Ative os lembretes primeiro e aceite a permissão.";render()}else notify("Teste: o lembrete vai aparecer assim.");return}
+if(a==="radd"){S.rem.times.push("12:00");save();render();return}
+if(a==="rx"){S.rem.times.splice(+t.getAttribute("data-i"),1);save();render();return}
 var ed=t.getAttribute&&t.getAttribute("data-ed");
 if(ed){editing=ed;adding=false;render();return}
 if(a){
@@ -210,6 +490,8 @@ document.addEventListener("mouseup",dEnd);
 document.addEventListener("keydown",function(ev){if(ev.key==="Enter"){var id=ev.target.id;if(id==="nn"||id==="ns")addEx();else if(id==="en"||id==="es")saveEdit()}});
 document.addEventListener("change",function(ev){
 var t=ev.target;
+if(t.id==="fi"){importFile(t);return}
+if(t.getAttribute&&t.getAttribute("data-rt")!==null&&t.value){S.rem.times[+t.getAttribute("data-rt")]=t.value;save();}
 if(t.matches&&t.matches('.r2 input[type=number]')){S.loads[lk(S.tab,t.getAttribute("data-i"),S.week)]=t.value;save();}
 });
 render();
