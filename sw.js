@@ -1,4 +1,4 @@
-const CACHE = "treino-v1";
+const CACHE = "treino-v3";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -18,6 +18,9 @@ self.addEventListener("activate", (e) => {
 // Tenta a internet primeiro; se estiver offline, usa o que está salvo.
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
+  const u = new URL(e.request.url);
+  // Não interceptar chamadas à API do Supabase (dados e login nunca ficam em cache do SW).
+  if (u.origin !== location.origin && u.hostname !== "cdn.jsdelivr.net") return;
   e.respondWith(
     fetch(e.request)
       .then((r) => {
@@ -26,5 +29,16 @@ self.addEventListener("fetch", (e) => {
         return r;
       })
       .catch(() => caches.match(e.request))
+  );
+});
+
+// Ao tocar na notificação, abre (ou volta para) o app.
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+      for (const c of list) { if ("focus" in c) return c.focus(); }
+      return clients.openWindow("./");
+    })
   );
 });
